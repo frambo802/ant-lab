@@ -1,0 +1,10 @@
+---
+- name: Update and Upgrade Ubuntu Servers
+  hosts: your_dns_servers
+  become: yes
+  tasks:
+    - name: Update all packages to the latest version
+      apt:
+        update_cache: yes
+        upgrade: dist
+        force_apt_get: yes
