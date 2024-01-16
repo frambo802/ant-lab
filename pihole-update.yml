@@ -4,6 +4,4 @@
   become: yes
   tasks:
     - name: Update Pi-hole
-      shell: pihole -up
-      args:
-        executable: /bin/bash
+      command: pihole -up
