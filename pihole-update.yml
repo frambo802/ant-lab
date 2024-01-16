@@ -1,0 +1,9 @@
+---
+- name: Update and Upgrade Ubuntu Servers and Pi-hole
+  hosts: all
+  become: yes
+  tasks:
+    - name: Update Pi-hole
+      shell: pihole -up
+      args:
+        executable: /bin/bash
