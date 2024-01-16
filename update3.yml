@@ -1,0 +1,32 @@
+---
+- name: Rolling Updates for Servers
+  hosts: all
+  become: yes
+  serial: 1  # Update servers one at a time
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+      register: apt_update
+
+    - name: Check for available package upgrades
+      command: apt-get dist-upgrade -s
+      register: apt_check_upgrade
+      changed_when: "'0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.' not in apt_check_upgrade.stdout"
+
+    - name: Perform system upgrade
+      apt:
+        upgrade: dist
+        force_apt_get: yes
+      when: apt_check_upgrade is changed
+
+    - name: Reboot the server if upgrades were applied
+      reboot:
+        msg: "Rebooting after system upgrade"
+        connect_timeout: 5
+        reboot_timeout: 300
+        pre_reboot_delay: 0
+        post_reboot_delay: 60
+        test_command: uptime
+      when: apt_check_upgrade is changed
