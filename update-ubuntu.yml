@@ -1,6 +1,6 @@
 ---
 - name: Update and Upgrade Ubuntu Servers
-  hosts: your_dns_servers
+  hosts: all
   become: yes
   tasks:
     - name: Update all packages to the latest version
