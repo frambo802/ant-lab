@@ -1,7 +1,24 @@
 ---
-- name: Update and Upgrade Ubuntu Servers and Pi-hole
+- name: Rolling Updates for Pi-hole Servers
   hosts: all
   become: yes
+
   tasks:
+    - name: Check if Pi-hole updates are available
+      command: pihole -v --check-only
+      register: pihole_update_check
+      changed_when: "'update available!' in pihole_update_check.stdout"
+
     - name: Update Pi-hole
       command: pihole -up
+      when: pihole_update_check is changed
+
+    - name: Reboot the server if updates were applied
+      reboot:
+        msg: "Rebooting after Pi-hole update"
+        connect_timeout: 5
+        reboot_timeout: 300
+        pre_reboot_delay: 0
+        post_reboot_delay: 60
+        test_command: uptime
+      when: pihole_update_check is changed
