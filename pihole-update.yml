@@ -2,6 +2,7 @@
 - name: Rolling Updates for Pi-hole Servers
   hosts: all
   become: yes
+  serial: 1  # Update servers one at a time
 
   tasks:
     - name: Check if Pi-hole updates are available
