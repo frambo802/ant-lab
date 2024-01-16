@@ -1,0 +1,9 @@
+---
+- name: Update and Upgrade Ubuntu Servers
+  hosts: all
+  become: yes
+  tasks:
+    - name: Run update and dist-upgrade
+      shell: apt-get update && apt dist-upgrade -y
+      args:
+        executable: /bin/bash
