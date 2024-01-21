@@ -1,0 +1,27 @@
+---
+- name: Install Webmin on Ubuntu
+  hosts: all hosts
+  become: yes  # Use sudo for the tasks
+  tasks:
+    - name: Download Webmin setup-repos.sh script
+      ansible.builtin.get_url:
+        url: https://raw.githubusercontent.com/webmin/webmin/master/setup-repos.sh
+        dest: /tmp/setup-repos.sh
+        mode: '0755'  # Ensure the script is executable
+
+    - name: Execute the setup-repos.sh script
+      ansible.builtin.command:
+        cmd: sh /tmp/setup-repos.sh
+      args:
+        removes: /tmp/setup-repos.sh  # Run this task only if the script exists
+
+    - name: Install Webmin
+      ansible.builtin.apt:
+        name: webmin
+        state: present
+        install_recommends: yes
+      register: installation_result
+
+    - name: Check installation result
+      ansible.builtin.debug:
+        var: installation_result
