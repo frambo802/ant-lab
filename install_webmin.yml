@@ -1,6 +1,6 @@
 ---
 - name: Install Webmin on Ubuntu
-  hosts: all hosts
+  hosts: all
   become: yes  # Use sudo for the tasks
   tasks:
     - name: Download Webmin setup-repos.sh script
